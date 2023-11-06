@@ -108,17 +108,22 @@ class IntersectionLabeler:
         self.coordinates_label.config(text=f"Coordinates: ({x}, {y})")
 
     def save_labels(self):
-        if self.labels:
-            with open(
-                f"coordinates_test.txt",
-                "a",
-            ) as f:
-                f.write(
-                    f"{os.path.basename(self.image_files[self.current_index]).removesuffix('.gif').removeprefix('map_')}, "
-                )
-                for intersection in self.labels[:-1]:
-                    f.write(f"{intersection[0]}-{intersection[1]}, ")
-                f.write(f"{intersection[0]}-{intersection[1]}\n")
+        try:
+            filename = f"coordinates_test.txt"
+            image_name = os.path.basename(self.image_files[self.current_index])
+            image_name = image_name.removesuffix(".gif").removeprefix("map_")
+
+            with open(filename, "a") as f:
+                f.write(f"{image_name}, ")
+
+                if self.labels:
+                    coordinates = [f"{x}-{y}" for x, y in self.labels]
+                    f.write(", ".join(coordinates) + "\n")
+                else:
+                    f.write("None\n")
+
+        except Exception as e:
+            print(f"An error occurred: {e}")
 
 
 if __name__ == "__main__":
