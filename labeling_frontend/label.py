@@ -12,8 +12,8 @@ class IntersectionLabeler:
         self.master = master
         self.master.title("Intersection Labeler")
 
-        self.canvas = tk.Canvas(master, width=500, height=500)
-        self.canvas.pack()
+        self.canvas = tk.Canvas(master, width=1000, height=1000)
+        self.canvas.pack(side=tk.TOP)
 
         self.image_files = []
         self.current_index = -1
@@ -37,6 +37,11 @@ class IntersectionLabeler:
         self.save_button.pack(side=tk.LEFT)
 
         self.canvas.bind("<Button-1>", self.label_intersection)
+
+        self.coordinates_label = tk.Label(master, text="Coordinates: (0, 0)")
+        self.coordinates_label.pack(side=tk.LEFT)
+
+        self.canvas.bind("<Motion>", self.update_coordinates)
 
         self.labels = []
 
@@ -86,14 +91,34 @@ class IntersectionLabeler:
         height, width, channels = self.image.shape
         self.tk_image = ImageTk.PhotoImage(Image.fromarray(self.image))
         self.canvas.create_image(
-            width // 2, height // 2, anchor=tk.CENTER, image=self.tk_image
+            height // 2, width // 2, anchor=tk.CENTER, image=self.tk_image
         )
 
     def label_intersection(self, event):
-        ...
+        if self.image is not None:
+            x = event.x
+            y = 1000 - event.y
+            self.labels.append((x, y))
+            cv2.circle(self.image, (event.x, event.y), 5, (255, 0, 0), -1)
+            self.display_image()
+
+    def update_coordinates(self, event):
+        x = event.x
+        y = 1000 - event.y
+        self.coordinates_label.config(text=f"Coordinates: ({x}, {y})")
 
     def save_labels(self):
-        ...
+        if self.labels:
+            with open(
+                f"coordinates_test.txt",
+                "a",
+            ) as f:
+                f.write(
+                    f"{os.path.basename(self.image_files[self.current_index]).removesuffix('.gif').removeprefix('map_')}, "
+                )
+                for intersection in self.labels[:-1]:
+                    f.write(f"{intersection[0]}-{intersection[1]}, ")
+                f.write(f"{intersection[0]}-{intersection[1]}\n")
 
 
 if __name__ == "__main__":
