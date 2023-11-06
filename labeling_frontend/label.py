@@ -3,6 +3,8 @@ from tkinter import filedialog
 import cv2
 import numpy as np
 import os
+import imageio
+from PIL import Image, ImageTk
 
 
 class IntersectionLabeler:
@@ -60,7 +62,32 @@ class IntersectionLabeler:
             self.load_image()
 
     def load_image(self):
-        ...
+        self.labels = []  # Clear previously recorded labels
+        path = self.image_files[self.current_index]
+
+        if path.lower().endswith(".gif"):
+            self.load_gif(path)
+        else:
+            self.image = cv2.imread(path)
+            self.image = cv2.cvtColor(self.image, cv2.COLOR_BGR2RGB)
+            self.display_image()
+
+    def load_gif(self, path):
+        self.gif = imageio.mimread(path)
+        self.frame_index = 0
+        self.image = self.gif[self.frame_index]
+        self.image = cv2.cvtColor(self.image, cv2.COLOR_RGB2BGR)
+        self.display_image()
+
+    def display_image(self):
+        if hasattr(self, "tk_image"):
+            self.canvas.delete(self.tk_image)
+
+        height, width, channels = self.image.shape
+        self.tk_image = ImageTk.PhotoImage(Image.fromarray(self.image))
+        self.canvas.create_image(
+            width // 2, height // 2, anchor=tk.CENTER, image=self.tk_image
+        )
 
     def label_intersection(self, event):
         ...
