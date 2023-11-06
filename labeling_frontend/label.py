@@ -51,7 +51,7 @@ class IntersectionLabeler:
             self.image_files = [
                 os.path.join(folder_path, f)
                 for f in os.listdir(folder_path)
-                if f.endswith((".jpg", ".png", ".gif"))
+                if f.endswith((".gif"))
             ]
             if self.image_files:
                 self.show_next()
@@ -73,9 +73,7 @@ class IntersectionLabeler:
         if path.lower().endswith(".gif"):
             self.load_gif(path)
         else:
-            self.image = cv2.imread(path)
-            self.image = cv2.cvtColor(self.image, cv2.COLOR_BGR2RGB)
-            self.display_image()
+            print("EPIC FAIL")
 
     def load_gif(self, path):
         self.gif = imageio.mimread(path)
