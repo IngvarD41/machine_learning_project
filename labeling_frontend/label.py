@@ -45,6 +45,11 @@ class IntersectionLabeler:
 
         self.labels = []
 
+        self.text_window = tk.Toplevel(self.master)
+        self.text_window.title("Text Messages")
+        self.text = tk.Text(self.text_window, height=20, width=80)
+        self.text.pack()
+
     def load_folder(self):
         folder_path = filedialog.askdirectory()
         if folder_path:
@@ -55,6 +60,8 @@ class IntersectionLabeler:
             ]
             if self.image_files:
                 self.show_next()
+            self.show_text_message(f"Loaded folder: {folder_path}")
+            self.show_text_message(f"{len(self.image_files)} images total")
 
     def show_previous(self):
         if self.current_index > 0:
@@ -73,7 +80,7 @@ class IntersectionLabeler:
         if path.lower().endswith(".gif"):
             self.load_gif(path)
         else:
-            print("EPIC FAIL")
+            self.show_text_message("EPIC FAIL")
 
     def load_gif(self, path):
         self.gif = imageio.mimread(path)
@@ -93,12 +100,15 @@ class IntersectionLabeler:
         )
 
     def label_intersection(self, event):
-        if self.image is not None:
-            x = event.x
-            y = 1000 - event.y
-            self.labels.append((x, y))
-            cv2.circle(self.image, (event.x, event.y), 5, (255, 0, 0), -1)
-            self.display_image()
+        try:
+            if self.image is not None:
+                x = event.x
+                y = 1000 - event.y
+                self.labels.append((x, y))
+                cv2.circle(self.image, (event.x, event.y), 5, (255, 0, 0), -1)
+                self.display_image()
+        except Exception as e:
+            self.show_text_message(f"An error occurred: {e}")
 
     def update_coordinates(self, event):
         x = event.x
@@ -116,12 +126,19 @@ class IntersectionLabeler:
 
                 if self.labels:
                     coordinates = [f"{x}-{y}" for x, y in self.labels]
-                    f.write(", ".join(coordinates) + "\n")
+                    result = ", ".join(coordinates)
+                    f.write(result + "\n")
                 else:
-                    f.write("None\n")
+                    result = "None"
+                    f.write(result + "\n")
+
+            self.show_text_message(f"Labels saved for {image_name}: {result}")
 
         except Exception as e:
-            print(f"An error occurred: {e}")
+            self.show_text_message(f"An error occurred: {e}")
+
+    def show_text_message(self, message):
+        self.text.insert(tk.END, message + "\n")
 
 
 if __name__ == "__main__":
