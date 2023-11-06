@@ -10,7 +10,7 @@ class IntersectionLabeler:
         self.master = master
         self.master.title("Intersection Labeler")
 
-        self.canvas = tk.Canvas(master, width=800, height=600)
+        self.canvas = tk.Canvas(master, width=1000, height=1000)
         self.canvas.pack()
 
         self.image = None
