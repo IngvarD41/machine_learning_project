@@ -218,10 +218,11 @@ while not done:
     if stop:
         break
 
+    # Clean up threads that have done their jobs and create new ones
+    current_threads = [t for t in current_threads if t.is_alive()]
     while len(current_threads) < NR_THREADS:
         current_threads.append(multiprocessing.Process(target=process_road, args=(data_queue, road_coords[road_index:])))
         current_threads[-1].start()
-        current_threads = [t for t in current_threads if t.is_alive()]
         road_index += 1
 
     while not data_queue.empty():
