@@ -2,10 +2,8 @@ import ast
 import time
 import signal
 import sys
-import threading
 import multiprocessing
 import os
-import queue
 
 COORDS_FILE = "tee_koordinaadid.csv"
 REPORT_TIME = 5
@@ -125,7 +123,7 @@ def write_results_to_file(intersections, road_nr, total_segments):
 
 # This will get summoned as a thread to process a certain road
 # Each road will be processed by a different thread because it requires surprising amount of computational power
-def process_road(data_queue, roads):
+def process_road(d_queue, roads):
     if len(roads) < 2:
         return
     processed_segments = 0
@@ -154,7 +152,7 @@ def process_road(data_queue, roads):
                 if intersection != None:
                     intersections.append(intersection)
                 processed_segments += 1
-    data_queue.put([intersections, processed_segments])
+    d_queue.put([intersections, processed_segments])
 
 print("Starting up...")
 road_coords = unpack_csv(COORDS_FILE)
@@ -193,7 +191,7 @@ last_report_time = start_time = time.time()
 
 road_index = start_road
 current_threads = []
-data_queue = queue.Queue()
+data_queue = multiprocessing.Queue()
 stop = False
 def stop_f(sig, frame):
     global stop
