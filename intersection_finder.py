@@ -46,7 +46,7 @@ def find_intersection_point(line1, line2):
     m2, b2 = line_coefficients(line2[0], line2[1])
 
     # If both are vertical, just find which points are the closest as this function only gets called when they surely intersect
-    if m1 == float('inf') and m2 == float('inf'):
+    if m1 == float('inf') and m2 == float('inf') or m1 == m2:
         if line1[0] == line2[0] or line1[0] == line2[1]:
             return line1[0]
         elif line1[1] == line2[0] or line1[1] == line2[1]:
