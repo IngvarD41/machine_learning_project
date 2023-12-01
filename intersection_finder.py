@@ -75,7 +75,7 @@ def print_logs_if_needed(last_report_time, nr_roads_done, nr_roads, done_segment
     progress = done_segments/total_segments
     time_taken = round(time.time() - start_time, 4)
     if progress == 0:
-        time_left = "Unknown"
+        time_left = float('inf')
     else:
         time_left = ((1/progress)*time_taken)-time_taken
     print("-------------------------------------------------")
