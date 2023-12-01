@@ -81,9 +81,9 @@ def print_logs_if_needed(last_report_time, nr_roads_done, nr_roads, done_segment
     print("-------------------------------------------------")
     print(f"Nr of roads processed: {nr_roads_done}/{nr_roads}")
     print(f"Nr of intersections found: {nr_found}")
-    print(f"Current progress: {progress*100}%")
-    print(f"Time taken: {time_taken}s")
-    print(f"Estimated time left: {time_left}s")
+    print(f"Current progress: {round(progress*100, 3)}%")
+    print(f"Time taken: {round(time_taken, 3)}s")
+    print(f"Estimated time left: {round(time_left, 3)}s")
     print("-------------------------------------------------\n")
     return time.time()
 
