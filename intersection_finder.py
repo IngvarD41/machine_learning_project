@@ -250,4 +250,4 @@ while not data_queue.empty():
 
 if done:
     print("Intersections done, will convert them to writable string now...")
-write_results_to_file(found_intersections, start_road + idx)
+write_results_to_file(found_intersections, road_index, total_processed_segments)
