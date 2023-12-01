@@ -212,6 +212,7 @@ while not done:
 
     if road_index >= len(road_coords) - 1:
         done = True
+        break
 
     if stop:
         break
