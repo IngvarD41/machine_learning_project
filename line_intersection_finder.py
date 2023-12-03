@@ -206,13 +206,17 @@ done = False
 currently_done_segments = 0
 total_segments_left = nr_segments - total_processed_segments
 while not done:
-    if len(road_coords[road_index][1]) < 2:
-        road_index += 1
-        continue
-
     if road_index >= len(road_coords) - 1:
         done = True
         break
+
+    if len(road_coords[road_index]) < 2:
+        road_index += 1
+        continue
+
+    if len(road_coords[road_index][1]) < 2:
+        road_index += 1
+        continue
 
     if stop:
         break
