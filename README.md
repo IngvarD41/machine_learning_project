@@ -16,14 +16,3 @@ Training data
 
 Test data
 * 1000 images (safeguarded until grading)
-
-## TODO
-1. Application to label training images
-    - Web vs local app
-1. Propose and compare possible algorithms
-    - YOLO is too powerful for the task
-    - Opencv might be capable.
-1. Write chosen algorithm in Python
-1. Train the model with training data
-1. Validate the model
-    - Improve hyperparameters and retrain
